@@ -1,0 +1,13 @@
+---
+
+- name: create vpc
+  include_tasks: roles/aliyun/tasks/vpc.yml
+
+- name: create vroswitch
+  include_tasks: roles/aliyun/tasks/vswitch.yml
+ 
+- name: create security group
+  include_tasks: roles/aliyun/tasks/security-group.yml
+
+- name: create ecs
+  include_tasks: roles/aliyun/tasks/ecs.yml

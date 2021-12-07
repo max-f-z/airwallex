@@ -1,0 +1,7 @@
+- name: app
+  hosts: app
+  remote_user: ansible
+  become: yes
+
+  roles:
+    - role: app

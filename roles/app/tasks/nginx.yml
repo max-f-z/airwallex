@@ -1,0 +1,63 @@
+---
+
+- name: prerequisite
+  yum: 
+    name: curl
+    state: present
+
+- name: stop container
+  shell: docker stop nginx
+  ignore_errors: yes
+  
+- name: start container
+  shell: docker run --rm --name nginx -d -p 80:80 nginx
+
+
+- name: test healthiness of the nginx container
+  shell: curl -s -o /dev/null -I -w "%{http_code}" http://localhost
+  register: health
+
+- debug:
+    var: health
+
+
+- name: fetch default page of nginx
+  shell: curl -s http://localhost
+  register: default
+
+- debug:
+    var: default
+
+- name: count most frequent words
+  shell: curl -s localhost:8080 | sed -n '/<body>/,/<\/body>/p' | sed -e 's/<[^>]*>//g' | tr -c '[:alnum:]' '[\n*]' | grep -v "^$" | sort | uniq -c | sort -r | head -1 | awk '{print $2}'
+  register: frequent
+
+- debug:
+    var: frequent
+
+- name: touch log file
+  file:
+    path: /tmp/nginx.log
+    state: touch
+
+- name: copy cron.sh
+  copy: 
+    src: cron.sh
+    dest: /tmp/cron.sh
+
+- name: chown cron.sh
+  file:
+    path: "/tmp/cron.sh"
+    owner: root
+    group: root
+    mode: 0500
+
+- cron:
+    name: "resource log"
+    minute: "*"
+    hour: "*"
+    day: "*"
+    month: "*"
+    weekday: "*"
+    user: "root"
+    job: "/bin/sh /tmp/cron.sh"

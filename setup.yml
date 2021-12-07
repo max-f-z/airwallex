@@ -1,0 +1,6 @@
+- name: setup
+  hosts: app
+  remote_user: root
+
+  roles:
+    - role: setup

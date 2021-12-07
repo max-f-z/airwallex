@@ -1,0 +1,6 @@
+- name: Create Resources
+  hosts: localhost
+  remote_user: root
+
+  roles:
+    - role: aliyun

@@ -1,0 +1,7 @@
+---
+
+# - name: install docker
+#   include_tasks: roles/app/tasks/docker.yml
+
+- name: run nginx
+  include_tasks: roles/app/tasks/nginx.yml

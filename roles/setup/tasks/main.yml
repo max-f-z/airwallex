@@ -1,0 +1,49 @@
+---
+
+- name: Create a ansible user
+  user:
+    name: ansible
+    shell: /bin/bash
+    password: $6$JT6MbXV8vdNCjaGY$g7c9.QdkoQqiapIHpD63hv7iUtZwjQKsYUSB6RjgUMHNxK8.k/.lSb2Fh0HyW0.K93T6a5PHExe2PVg/9XmIB.
+
+- name: Add ansible to sudoers
+  lineinfile:
+    path: /etc/sudoers
+    state: present
+    regexp: "^%ansible"
+    line: "%ansible ALL=(ALL) NOPASSWD:ALL"
+    validate: "/usr/sbin/visudo -cf %s"
+
+- name: Set authorized key taken from file
+  authorized_key:
+    user: ansible
+    state: present
+    key: "{{ lookup('file', '/root/.ssh/id_rsa.pub') }}"
+
+- name: Set file permissions on /home/ansible/.ssh/authorized_keys
+  file:
+    path: /home/ansible/.ssh/authorized_keys
+    owner: ansible
+    group: ansible
+    mode: 0400
+
+- name: Disable root login via password
+  lineinfile:
+    path: /etc/ssh/sshd_config
+    state: present
+    regexp: "^PermitRootLogin"
+    line: "PermitRootLogin prohibit-password"
+
+- name: Disable PasswordAuthentication
+  lineinfile:
+    path: /etc/ssh/sshd_config
+    state: present
+    regexp: "^PasswordAuthentication"
+    line: "PasswordAuthentication no"
+
+- name: restart sshd
+  systemd:
+    name: sshd
+    daemon_reload: yes
+    state: restarted
+    enabled: yes

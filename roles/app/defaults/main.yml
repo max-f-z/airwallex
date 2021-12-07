@@ -1,0 +1,6 @@
+---
+
+docker_version: 18.09.9-3.el7
+docker_config_dir: /etc/docker
+
+dockerd_option_graph: /var/lib/docker
