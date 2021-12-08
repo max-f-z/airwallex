@@ -35,7 +35,14 @@
     name: "docker-ce-cli-{{ docker_version }}"
     state: present
   notify: restart docker
-  
+
+- name: start docker
+  systemd:
+    name: docker
+    state: started
+    daemon_reload: yes
+    enabled: true
+
 - name: copy dockerd daemon.json
   template: 
     src: daemon.json.j2
