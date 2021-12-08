@@ -30,9 +30,23 @@
 - debug:
     var: default
 
+- name: copy frequent.sh
+  copy: 
+    src: frequent.sh
+    dest: /tmp/frequent.sh
+
+- name: chown frequent.sh
+  file:
+    path: "/tmp/frequent.sh"
+    owner: root
+    group: root
+    mode: 0500
+
 - name: count most frequent words
-  shell: curl -s localhost:8080 | sed -n '/<body>/,/<\/body>/p' | sed -e 's/<[^>]*>//g' | tr -c '[:alnum:]' '[\n*]' | grep -v "^$" | sort | uniq -c | sort -r | head -1 | awk '{print $2}'
+  shell: /tmp/frequent.sh
   register: frequent
+  sudo: yes
+  sudo_user: root
 
 - debug:
     var: frequent
