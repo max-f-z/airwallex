@@ -41,32 +41,27 @@
     regexp: "^PasswordAuthentication"
     line: "PasswordAuthentication no"
 
-- name: epel-release
-  yum:
-    name: epel-release
-    state: present
 
-- name: install ufw
-  yum:
-    name: ufw
-    enablerepo: epel
-    state: present
+- name: Enable firewalld
+  firewalld:
+    zone: public
+      port: "22"
+      permanent: true
+      state: "enabled"
 
-- name: Enable ufw access for OpenSSH
-  ufw:
-    rule: allow
-    port: '22'
-    proto: tcp
+- name: Enable firewalld
+  firewalld:
+    zone: public
+      port: "80"
+      permanent: true
+      state: "enabled"
 
-- name: Allow access on port 80
-  ufw:
-    rule: allow
-    port: '80'
-    proto: tcp
-
-- name: Enable ufw
-  ufw:
-    state: enabled
+- name: restart firewalld
+  systemd:
+    name: firewalld
+    daemon_reload: yes
+    state: restarted
+    enabled: yes
 
 - name: restart sshd
   systemd:
