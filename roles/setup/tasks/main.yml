@@ -55,7 +55,8 @@
 - name: Enable ufw access for OpenSSH
   ufw:
     rule: allow
-    name: OpenSSH
+    port: '22'
+    proto: tcp
 
 - name: Allow access on port 80
   ufw:
