@@ -18,7 +18,7 @@
   authorized_key:
     user: ansible
     state: present
-    key: "{{ lookup('file', '/root/.ssh/id_rsa.pub') }}"
+    key: "{{ lookup('file', '/home/shell/.ssh/id_rsa.pub') }}"
 
 - name: Set file permissions on /home/ansible/.ssh/authorized_keys
   file:
@@ -40,6 +40,37 @@
     state: present
     regexp: "^PasswordAuthentication"
     line: "PasswordAuthentication no"
+
+- name: disable icmp ipv4
+  become: yes
+  sysctl:
+    name: net.ipv4.icmp_echo_ignore_all
+    value: 1
+    state: present
+    reload: yes
+
+- name: disable icmp ipv6
+  become: yes
+  sysctl:
+    name: net.ipv6.icmp_echo_ignore_all
+    value: 1
+    state: present
+    reload: yes
+
+- name: Enable ufw access for OpenSSH
+  ufw:
+    rule: allow
+    name: OpenSSH
+
+- name: Allow access on port 80
+  ufw:
+    rule: allow
+    port: '80'
+    proto: tcp
+
+- name: Enable ufw
+  ufw:
+    state: enabled
 
 - name: restart sshd
   systemd:
