@@ -41,22 +41,6 @@
     regexp: "^PasswordAuthentication"
     line: "PasswordAuthentication no"
 
-- name: disable icmp ipv4
-  become: yes
-  sysctl:
-    name: net.ipv4.icmp_echo_ignore_all
-    value: 1
-    state: present
-    reload: yes
-
-- name: disable icmp ipv6
-  become: yes
-  sysctl:
-    name: net.ipv6.icmp_echo_ignore_all
-    value: 1
-    state: present
-    reload: yes
-
 - name: Enable ufw access for OpenSSH
   ufw:
     rule: allow
