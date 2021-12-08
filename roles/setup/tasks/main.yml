@@ -45,14 +45,14 @@
 - name: Enable firewalld
   firewalld:
     zone: public
-    port: "22"
+    port: "22/tcp"
     permanent: true
     state: "enabled"
 
 - name: Enable firewalld
   firewalld:
     zone: public
-    port: "80"
+    port: "80/tcp"
     permanent: true
     state: "enabled"
 
