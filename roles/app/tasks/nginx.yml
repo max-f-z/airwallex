@@ -11,6 +11,8 @@
   
 - name: start container
   shell: docker run --rm --name nginx -d -p 80:80 nginx
+  sudo: yes
+  sudo_user: root
 
 
 - name: test healthiness of the nginx container
