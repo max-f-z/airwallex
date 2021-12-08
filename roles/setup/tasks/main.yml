@@ -45,16 +45,16 @@
 - name: Enable firewalld
   firewalld:
     zone: public
-      port: "22"
-      permanent: true
-      state: "enabled"
+    port: "22"
+    permanent: true
+    state: "enabled"
 
 - name: Enable firewalld
   firewalld:
     zone: public
-      port: "80"
-      permanent: true
-      state: "enabled"
+    port: "80"
+    permanent: true
+    state: "enabled"
 
 - name: restart firewalld
   systemd:
